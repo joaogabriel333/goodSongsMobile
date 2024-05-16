@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
@@ -5,12 +6,7 @@ import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableHighlig
 
 
 
-
-
-
-
-
-function CadastroMusica(): React.JSX.Element {
+function SignIn(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const [titulo, setTitulo] = useState<string>('');
     const [duracao, setDuracao] = useState<string>('');
@@ -20,15 +16,12 @@ function CadastroMusica(): React.JSX.Element {
     const [ano_lancamento, setAno_lancamento] = useState<string>('');
     const [album, setAlbum] = useState<string>('');
 
-
     const [isHovered, setIsHovered] = useState(false);
     const [isButton1Pressed, setIsButton1Pressed] = useState(false);
-
 
     const handleButton1Press = () => {
         setIsButton1Pressed(true);
     };
-
 
     const handleButton2Press = () => {
         setIsButton1Pressed(false);
@@ -43,20 +36,46 @@ function CadastroMusica(): React.JSX.Element {
         const navigateToSignUp = () => {
             navigation.navigate('SignUp'); // Nome da tela de cadastro
         };*/
+
+
+           const cadastrarMusica = async () => {
+         try {
+             const formData = new FormData();
+             formData.append('titulo', titulo);
+             formData.append('duracao', duracao);
+             formData.append('artista', artista);
+             formData.append('genero', genero);
+             formData.append('nacionalidade', nacionalidade);
+             formData.append('ano_lancamento', ano_lancamento);
+             formData.append('album', album);
+ 
+             console.log(formData);
+             const response = await axios.post('http://10.137.11.222:8000/api/cadastro/musica', formData, {
+                 headers: {
+                     'Content-Type': 'multipart/form-data'
+                 }
+             });
+             if (response.status == 200) {
+                     console.log("cadastrado")
+             }
+             else 
+             
+             {
+                 console.log("Musica não cadastrada");
+             }
+         } catch (error) {
+             console.log(error);
+         }
+     }
+
+
     return (
         <View style={styles.container}>
-            <View style={styles.containerHeader}>
-
-
-                <Text style={styles.message}>Musicas</Text>
-            </View>
-
+            
 
             <View style={styles.containerForm}>
 
-
                 <ScrollView style={styles.card}>
-
 
                    {/* <View style={styles.buttonEntrar}>
                         <TouchableOpacity
@@ -73,11 +92,9 @@ function CadastroMusica(): React.JSX.Element {
                         </TouchableOpacity>
                     </View>
 
-
     */ }
 
-
-                    <Text style={styles.title}>Acesse sua conta</Text>
+                    
                     <TextInput
                         placeholder="Titulo"
                         placeholderTextColor={'#fff'}
@@ -125,18 +142,12 @@ function CadastroMusica(): React.JSX.Element {
                         placeholderTextColor={'#fff'}
                         style={styles.input}
                         value={album}
-                       
+                        onChangeText={setAlbum}
                     /> 
                     
 
-
-                    <TouchableOpacity style={styles.buttonll}><Text style={styles.buttonllText}>Entrar</Text></TouchableOpacity>
-
-
-
-
-
-
+                    <TouchableOpacity style={styles.buttonll}
+                    onPress={cadastrarMusica}><Text style={styles.buttonllText}>Cadastrar</Text></TouchableOpacity>
 
 
 
@@ -148,7 +159,6 @@ function CadastroMusica(): React.JSX.Element {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -169,12 +179,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#002f6c',
     },
     containerForm: {
-        backgroundColor: '#002f6c',
-
+        
+        backgroundColor: '#33415C',
 
         flex: 1,
-        borderTopLeftRadius: 25,
-        borderTopRightRadius: 25,
+       
         paddingStart: '5%',
         paddingEnd: '5%',
         //justifyContent: 'center'
@@ -196,26 +205,22 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     input: {
-        borderWidth: 2,
-        borderColor: 'grey', // Cor da borda
-        backgroundColor: '#002f6c', // Cor de fundo
+        backgroundColor: '#386FA4', // Cor de fundo
         height: 50,
         marginBottom: 12,
         fontSize: 20,
         paddingHorizontal: 10,
-        borderRadius: 10,
+        borderRadius: 40,
         paddingLeft: 25,
-
 
         // Adiciona um preenchimento horizontal,
 
-
     }, card: {
-        borderWidth: 1,
-        borderColor: 'grey',
+        
         padding: 20,
-        marginTop: 40,
-        borderRadius: 15
+        marginTop: 140,
+        borderRadius: 15,
+        marginBottom:40
     },
     inputPassword: {
         borderWidth: 2,
@@ -229,7 +234,6 @@ const styles = StyleSheet.create({
         paddingLeft: 25,
         marginTop: 10
         // Adiciona um preenchimento horizontal,
-
 
     },
     button: {
@@ -280,5 +284,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
-export default CadastroMusica;
+export default SignIn;
