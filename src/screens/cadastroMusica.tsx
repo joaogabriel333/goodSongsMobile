@@ -1,12 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import axios from 'axios';
 
+function CadastroMusica(): React.JSX.Element {
 
-
-
-
-function SignIn(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const [titulo, setTitulo] = useState<string>('');
     const [duracao, setDuracao] = useState<string>('');
@@ -16,29 +13,9 @@ function SignIn(): React.JSX.Element {
     const [ano_lancamento, setAno_lancamento] = useState<string>('');
     const [album, setAlbum] = useState<string>('');
 
-    const [isHovered, setIsHovered] = useState(false);
-    const [isButton1Pressed, setIsButton1Pressed] = useState(false);
-
-    const handleButton1Press = () => {
-        setIsButton1Pressed(true);
-    };
-
-    const handleButton2Press = () => {
-        setIsButton1Pressed(false);
-    };
-    /*
-           // Função para navegar para a tela de login
-           const navigateToLogin = () => {
-            navigation.navigate('Login'); // Nome da tela de login
-        };
     
-        // Função para navegar para a tela de cadastro
-        const navigateToSignUp = () => {
-            navigation.navigate('SignUp'); // Nome da tela de cadastro
-        };*/
 
-
-           const cadastrarMusica = async () => {
+    /* const cadastrarCliente = async () => {
          try {
              const formData = new FormData();
              formData.append('titulo', titulo);
@@ -50,7 +27,7 @@ function SignIn(): React.JSX.Element {
              formData.append('album', album);
  
              console.log(formData);
-             const response = await axios.post('http://10.137.11.222:8000/api/cadastro/musica', formData, {
+             const response = await axios.post('http://10.137.11.223:8000/api/cadastro/musica', formData, {
                  headers: {
                      'Content-Type': 'multipart/form-data'
                  }
@@ -58,26 +35,39 @@ function SignIn(): React.JSX.Element {
              if (response.status == 200) {
                      console.log("cadastrado")
              }
-             else 
-             
-             {
-                 console.log("Musica não cadastrada");
+             else {
+                 console.log("Cliente não cadastrado");
              }
          } catch (error) {
              console.log(error);
          }
-     }
+     }*/
 
 
+    const [isButton1Pressed, setIsButton1Pressed] = useState(false);
+
+    const handleButton1Press = () => {
+        setIsButton1Pressed(true);
+    };
+
+    const handleButton2Press = () => {
+        setIsButton1Pressed(false);
+    };
     return (
+
+
+
         <View style={styles.container}>
-            
+            <View style={styles.containerHeader}>
+
+                <Text style={styles.message}>Cadastro de Musica</Text>
+            </View>
 
             <View style={styles.containerForm}>
 
-                <ScrollView style={styles.card}>
+                <View style={styles.card}>
 
-                   {/* <View style={styles.buttonEntrar}>
+                    <View style={styles.buttonEntrar}>
                         <TouchableOpacity
                             style={[styles.button, isButton1Pressed ? styles.buttonPressed : null]}
                             onPress={handleButton1Press}
@@ -92,9 +82,7 @@ function SignIn(): React.JSX.Element {
                         </TouchableOpacity>
                     </View>
 
-    */ }
-
-                    
+                    <Text style={styles.title}>Acesse sua conta</Text>
                     <TextInput
                         placeholder="Titulo"
                         placeholderTextColor={'#fff'}
@@ -105,7 +93,7 @@ function SignIn(): React.JSX.Element {
                     <TextInput
                         placeholder="Sua senha"
                         placeholderTextColor={'#fff'}
-                        style={styles.input}
+                        style={styles.inputPassword}
                         value={duracao}
                         onChangeText={setDuracao}
                     />
@@ -119,7 +107,7 @@ function SignIn(): React.JSX.Element {
                     <TextInput
                         placeholder="Genero"
                         placeholderTextColor={'#fff'}
-                        style={styles.input}
+                        style={styles.inputPassword}
                         value={genero}
                         onChangeText={setGenero}
                     />
@@ -133,30 +121,30 @@ function SignIn(): React.JSX.Element {
                     <TextInput
                         placeholder="Ano de Lançamento"
                         placeholderTextColor={'#fff'}
-                        style={styles.input}
+                        style={styles.inputPassword}
                         value={ano_lancamento}
                         onChangeText={setAno_lancamento}
-                    /> 
-                    <TextInput
+                        
+                    /> <TextInput
                         placeholder="Album"
                         placeholderTextColor={'#fff'}
                         style={styles.input}
                         value={album}
                         onChangeText={setAlbum}
-                    /> 
-                    
+                    />
 
-                    <TouchableOpacity style={styles.buttonll}
-                    onPress={cadastrarMusica}><Text style={styles.buttonllText}>Cadastrar</Text></TouchableOpacity>
 
+                    <TouchableOpacity style={styles.buttonll}><Text style={styles.buttonllText}>Entrar</Text></TouchableOpacity>
 
 
 
 
 
-                </ScrollView>
+
+                </View>
             </View>
         </View>
+
     );
 }
 
@@ -173,17 +161,15 @@ const styles = StyleSheet.create({
     message: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: '#002f6c',
+        color: '#171717',
     },
     buttonPressed: {
-        backgroundColor: '#002f6c',
+        backgroundColor: '#171717',
     },
     containerForm: {
-        
-        backgroundColor: '#33415C',
+        backgroundColor: '#171717',
 
-        flex: 1,
-       
+        flex: 1,    
         paddingStart: '5%',
         paddingEnd: '5%',
         //justifyContent: 'center'
@@ -205,27 +191,29 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     input: {
-        backgroundColor: '#386FA4', // Cor de fundo
+        borderWidth: 2,
+        borderColor: 'grey', // Cor da borda
+        backgroundColor: '#171717', // Cor de fundo
         height: 50,
         marginBottom: 12,
         fontSize: 20,
         paddingHorizontal: 10,
-        borderRadius: 40,
+        borderRadius: 10,
         paddingLeft: 25,
 
         // Adiciona um preenchimento horizontal,
 
     }, card: {
-        
+        borderWidth: 1,
+        borderColor: 'grey',
         padding: 20,
-        marginTop: 140,
-        borderRadius: 15,
-        marginBottom:40
+        marginTop: 40,
+        borderRadius: 15
     },
     inputPassword: {
         borderWidth: 2,
         borderColor: 'grey', // Cor da borda
-        backgroundColor: '#002f6c', // Cor de fundo
+        backgroundColor: '#171717', // Cor de fundo
         height: 50,
         marginBottom: 12,
         fontSize: 20,
@@ -279,9 +267,13 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     buttonllText: {
-        color: '#002f6c',
+        color: '#171717',
         fontSize: 20
     }
 });
 
-export default SignIn;
+
+
+
+
+export default CadastroMusica;
