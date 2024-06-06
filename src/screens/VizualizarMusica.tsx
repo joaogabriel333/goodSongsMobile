@@ -15,18 +15,20 @@ interface Musica {
     album: string;
 }
 
-function VizualizarMusica(): React.JSX.Element {
+function VisualizarMusica(): React.JSX.Element {
     const [musicas, setMusicas] = useState<Musica[]>([]);
     const navigation = useNavigation();
+    
 
-    const buscar = async () => {
+    const buscar = async (titulo: string) => {
         try {
-            const response = await axios.post('http://10.137.11.224:8000/api/pesquisar/musica/titulo', { titulo: '' }); 
-            console.log('buscando os carros');
-            if (response.data.status === true) {
+            const response = await axios.post('http://10.137.11.223:8000/api/pesquisar/musica/titulo', { titulo });
+            console.log('buscando os dados');
+            if (response.status === 200) {
+                console.log(response.data.data)
                 setMusicas(response.data.data);
             } else {
-                console.log('Erro na busca:', response.data.message);
+                console.log('Erro na busca:', response.data.data);
             }
         } catch (error) {
             console.log('Erro na requisição:', error);
@@ -34,19 +36,19 @@ function VizualizarMusica(): React.JSX.Element {
     };
 
     const Delete = async (id: number) => {
-        axios.delete(`http://10.137.11.224:8000/api/delete/musica/${id}`).then(function (response) {
-            if(response.status === 200) {
+        axios.delete(`http://10.137.11.223:8000/api/delete/musica/${id}`).then(function (response) {
+            if (response.status === 200) {
                 Alert.alert('Musica Excluida com sucesso');
             }
-        }).catch(function (error) { 
+        }).catch(function (error) {
             console.log(error);
         });
     };
 
     const listarMusicas = async () => {
         try {
-            const response = await axios.get('http://10.137.11.224:8000/api/musica/retornarTodasMusicas');
-            if(response.status === 200) {
+            const response = await axios.get('http://10.137.11.223:8000/api/visualizar/musica');
+            if (response.status === 200) {
                 setMusicas(response.data.data);
             }
         } catch (error) {
@@ -60,7 +62,7 @@ function VizualizarMusica(): React.JSX.Element {
 
     const renderItem = ({ item }: { item: Musica }) => (
         <View style={styles.form}>
-            <View style={styles.card}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DetalhesMusica', { musica: item })}>
                 <Image style={styles.imagem} source={require('../images/musica.png')} />
                 <View style={styles.column}>
                     <Text style={styles.titulo}>{item.titulo}</Text>
@@ -72,7 +74,7 @@ function VizualizarMusica(): React.JSX.Element {
                 <TouchableOpacity onPress={() => Delete(item.id)} style={styles.alignEdit}>
                     <Image style={styles.configDelete} source={require('../images/deletee.png')} />
                 </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
         </View>
     );
 
@@ -81,10 +83,15 @@ function VizualizarMusica(): React.JSX.Element {
             <View style={styles.header}>
                 <View style={styles.row}>
                     <Text style={styles.headerText}>Playlist</Text>
-                    <TextInput placeholder="Search Music" placeholderTextColor={'grey'} style={styles.inputSearch}></TextInput>
+                    <TextInput
+                        placeholder="Search Music"
+                        onChangeText={(text) => text && buscar(text)}
+                        placeholderTextColor={'grey'}
+                        style={styles.inputSearch}
+                    />
                 </View>
             </View>
-            {musicas.length === 0 ? (
+            {musicas.length === 0? (
                 <View style={styles.noItemsContainer}>
                     <Text style={styles.noItemsText}>Não há nenhum registro</Text>
                 </View>
@@ -96,7 +103,7 @@ function VizualizarMusica(): React.JSX.Element {
                     keyExtractor={(item) => item.id.toString()}
                 />
             )}
-            <Footer/>
+            <Footer />
         </View>
     );
 }
@@ -110,8 +117,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#292838',
         paddingVertical: 10,
         alignItems: 'flex-start',
-
-        height: 150
+        height: 100,
     },
     headerText: {
         fontSize: 50,
@@ -203,7 +209,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
 
-    },configEdit: {
+    }, configEdit: {
 
         width: 30,
         height: 30,
@@ -227,7 +233,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: 'black',
         color: 'grey',
-        paddingLeft: 60,
+        paddingLeft: 20,
         fontSize: 20,
         marginLeft: 20,
         marginTop: 20
@@ -238,20 +244,20 @@ const styles = StyleSheet.create({
     inputSearchImage: {
         width: 35,
         height: 35,
-        left:10
-        
-        
-    },noItemsContainer: {
+        left: 10
+
+
+    }, noItemsContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-      },
-      noItemsText: {
+    },
+    noItemsText: {
         fontSize: 18,
         color: '#999',
-      },
+    },
 
 })
 
-export default VizualizarMusica;
+export default VisualizarMusica;
