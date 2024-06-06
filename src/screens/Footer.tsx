@@ -9,7 +9,7 @@ function Footer(): React.JSX.Element{
     const navigation = useNavigation();
     return(
         <View style={styles.footer}>
-           <TouchableOpacity onPress={()=>navigation.navigate('Home')}>
+           <TouchableOpacity onPress={()=>navigation.navigate('Vizualizar')}>
             <Image source={require('../images/home2.png') } 
              style={styles.footerIcon}/>
            </TouchableOpacity>

@@ -45,7 +45,7 @@ function VizualizarMusica(): React.JSX.Element {
 
     const listarMusicas = async () => {
         try {
-            const response = await axios.get('http://10.137.11.224:8000/api/vizualizar/musica');
+            const response = await axios.get('http://10.137.11.224:8000/api/musica/retornarTodasMusicas');
             if(response.status === 200) {
                 setMusicas(response.data.data);
             }
